@@ -1,27 +1,28 @@
 import java.util.*;
 
-public class Lempel_Ziv_Welch_Compression {
+public class Lempel_Ziv_Welch_Bit_Size {
 
-    private static  Map<String, Integer> dictionary;
+    private static Map<String, Integer> dictionary;
+    private static int bitLevel;
 
     public static void main( String[] args ) {
 
-        dictionary = new TreeMap<>();
+        dictionary = new HashMap<>();
         try {
             System.out.println("Please enter a String: ");
             Scanner scan = new Scanner( System.in );
 
+            bitLevel = 9;
             String str = scan.nextLine();
             ArrayList<String> binaryVals = compress( str );
             String compressed = print( binaryVals );
-            System.out.println( "Compression Ratio: " +  ( str.length() * 8 ) /( ( (double)binaryVals.size() * 10 ) ) + " :1");
+            System.out.println( "Compression Ratio: " + ( str.length() * 8 )/( ( (double)binaryVals.size() * bitLevel ) ) + " :1");
+            System.out.println("Bit Level: " + bitLevel );
         }
         catch( Exception e ) {
             e.printStackTrace();
         }
-
     }
-
 
     public static ArrayList<String> compress(String str ) {
         int binaryCounter = 128;
@@ -57,6 +58,9 @@ public class Lempel_Ziv_Welch_Compression {
                 if ( !atEnd ) {
                     System.out.println( i + ": " + current.toString() );
                     binaryVals.add( current.toString() );
+                    if ( Integer.toBinaryString( binaryCounter ).length() == bitLevel) {
+                        bitLevel++;
+                    }
                     dictionary.put( current.append(next).toString(),  binaryCounter++ );
                 }
                 else {
@@ -75,11 +79,11 @@ public class Lempel_Ziv_Welch_Compression {
         StringBuilder decimal = new StringBuilder( );
         for ( String s : binaryVals ) {
             if ( dictionary.containsKey( s ) ) {
-                stringBuilder.append( resizeBinaryToBitLevel( dictionary.get( s ) , 10 ) );
+                stringBuilder.append( resizeBinaryToBitLevel( dictionary.get( s ) , bitLevel ) );
                 decimal.append(dictionary.get(s) + " ");
             }
             else {
-                stringBuilder.append( resizeBinaryToBitLevel( (int)(s.charAt( 0 ) ), 10 ) );
+                stringBuilder.append( resizeBinaryToBitLevel( (int)(s.charAt( 0 ) ), bitLevel ) );
                 decimal.append( (int)s.charAt(0) + " ");
             }
         }

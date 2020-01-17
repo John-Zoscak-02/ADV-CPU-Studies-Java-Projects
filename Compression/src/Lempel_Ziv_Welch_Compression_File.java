@@ -1,9 +1,6 @@
 import java.io.File;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TreeMap;
+import java.util.*;
 
 public class Lempel_Ziv_Welch_Compression_File {
 
@@ -13,9 +10,9 @@ public class Lempel_Ziv_Welch_Compression_File {
 
     public static void main( String[] args ) {
 
-        dictionary = new TreeMap<>();
+        dictionary = new HashMap<>();
         try {
-            File f = new File( "C:\\Users\\jmz00\\Git\\Robotics\\Compression\\src\\thingy.txt" );
+            File f = new File( "C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\src\\thingy.txt" );
             Scanner scan = new Scanner( f );
 
             binaryCounter = 128;
@@ -29,7 +26,7 @@ public class Lempel_Ziv_Welch_Compression_File {
                 lengthAfter += binaryVals.size() * 10;
                 print( binaryVals );
             }
-            System.out.println( "Compression Ratio: " + ( lengthAfter / lengthBefore ) );
+            System.out.println( "Compression Ratio: " + ( lengthBefore/lengthAfter ) + " :1");
             printWriter.close();
         }
         catch( Exception e ) {
@@ -106,7 +103,7 @@ public class Lempel_Ziv_Welch_Compression_File {
         }
         //System.out.println( stringBuilder.toString() );
         //System.out.println( decimal.toString());
-        printWriter.print( stringBuilder.toString() );
+        printWriter.append( stringBuilder.toString() );
 
         return stringBuilder.toString();
     }
