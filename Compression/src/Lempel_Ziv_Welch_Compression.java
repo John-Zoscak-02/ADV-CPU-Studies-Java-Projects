@@ -96,7 +96,7 @@ public class Lempel_Ziv_Welch_Compression {
                 stringBuilder.append( binary.charAt( i ) );
             }
             else {
-                stringBuilder.append( 0 );
+                stringBuilder.insert(0, 0);
             }
         }
         return stringBuilder.toString();

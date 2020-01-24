@@ -7,7 +7,7 @@ public class Lempel_Ziv_Welch_Bit_Size {
 
     public static void main( String[] args ) {
 
-        dictionary = new HashMap<>();
+        dictionary = new TreeMap<>();
         try {
             System.out.println("Please enter a String: ");
             Scanner scan = new Scanner( System.in );
@@ -100,7 +100,7 @@ public class Lempel_Ziv_Welch_Bit_Size {
                 stringBuilder.append( binary.charAt( i ) );
             }
             else {
-                stringBuilder.append( 0 );
+                stringBuilder.insert(0, 0);;
             }
         }
         return stringBuilder.toString();

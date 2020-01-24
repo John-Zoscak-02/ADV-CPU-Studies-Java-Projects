@@ -1,5 +1,3 @@
-import com.sun.tools.javac.util.StringUtils;
-
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.*;
@@ -13,37 +11,42 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
 
     public static void main(String[] args) {
 
-        dictionary = new HashMap<>();
+        dictionary = new TreeMap<>();
         try {
-            File f = new File("C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\src\\thingy.txt");
+            File f = new File("C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\src\\uncompressed.txt");
             Scanner scan = new Scanner(f);
 
             binaryCounter = 128;
             double lengthBefore = 0d;
             int lengthAfter = 0;
             bitLevel = 9;
-            printWriter = new PrintWriter("thingycompressed.txt", "UTF-8");
+            printWriter = new PrintWriter("compressed.txt", "UTF-8");
 
             StringBuilder stringBuilder = new StringBuilder();
             while (scan.hasNext()) {
                 String str = scan.nextLine();
                 lengthBefore += str.length() * 8;
                 ArrayList<String> binaryVals = compress(str);
-                System.out.println( binaryVals );
-                lengthAfter += binaryVals.size() * bitLevel;
+                //System.out.println( binaryVals );
+                lengthAfter += binaryVals.size();
                 stringBuilder.append( print( binaryVals ) ).append("\n");
             }
 
             printWriter.print( stringBuilder.toString() );
-            System.out.println("Compression Ratio: " + lengthBefore/lengthAfter + " :1");
-            System.out.println("Bit Level: " + bitLevel );
+            printCompressionRatios( lengthBefore, lengthAfter );
             printWriter.close();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-        public static ArrayList<String> compress( String str ) {
+    public static void printCompressionRatios( double lengthBefore, int lengthAfter ) {
+        for ( int i = 9; i <= bitLevel; i-=-1 ) {
+            System.out.println( "Bit Level: " + i + "  Compression Ratio: " + (lengthBefore/(lengthAfter*i)) );
+        }
+    }
+
+    public static ArrayList<String> compress( String str ) {
             int binaryCounter = 128;
             int i = 0;
             ArrayList<String> binaryVals = new ArrayList<>();
@@ -63,7 +66,8 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
                         if (i < str.length() - 2) {
                             i++;
                             next = str.charAt(i + 1);
-                        } else {
+                        }
+                        else {
                             next = '\u0000';
                             i++;
                             atEnd = true;
@@ -122,7 +126,7 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
                 if (binary.length() > i) {
                     stringBuilder.append(binary.charAt(i));
                 } else {
-                    stringBuilder.append(0);
+                    stringBuilder.insert(0, 0);;
                 }
             }
             return stringBuilder.toString();

@@ -10,15 +10,15 @@ public class Lempel_Ziv_Welch_Compression_File {
 
     public static void main( String[] args ) {
 
-        dictionary = new HashMap<>();
+        dictionary = new TreeMap<>();
         try {
-            File f = new File( "C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\src\\thingy.txt" );
+            File f = new File( "C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\src\\uncompressed.txt" );
             Scanner scan = new Scanner( f );
 
             binaryCounter = 128;
             double lengthBefore = 0d;
             int lengthAfter = 0;
-            printWriter = new PrintWriter("thingycompressed.txt", "UTF-8");
+            printWriter = new PrintWriter("uncompressed.txt", "UTF-8");
             while ( scan.hasNext() ) {
                 String str = scan.nextLine();
                 lengthBefore += str.length() * 8;
@@ -116,7 +116,7 @@ public class Lempel_Ziv_Welch_Compression_File {
                 stringBuilder.append( binary.charAt( i ) );
             }
             else {
-                stringBuilder.append( 0 );
+                stringBuilder.insert(0, 0);;
             }
         }
         return stringBuilder.toString();
