@@ -25,7 +25,7 @@ public class Lempel_Ziv_Welch_Decompression {
             }
 
             ArrayList<String> segments = decompress( binary, scan.nextInt() );
-            segments.forEach(System.out::println);
+            segments.forEach(System.out::print);
         }
         catch( Exception e ) {
             e.printStackTrace();
@@ -43,19 +43,26 @@ public class Lempel_Ziv_Welch_Decompression {
             while ( i < binary.length() ) {
                 StringBuilder current = new StringBuilder( );
                 current.append( binary.substring(i, i + bitLevel) );
+                dictionary.put( binaryCounter, getVal( current.toString() ) );
 
-                if ( i + bitLevel < binary.length() - bitLevel - 1) {
+                if ( i + (2*bitLevel) < binary.length() ) {
                     String next = binary.substring(i + bitLevel, i + (2*bitLevel));
                     String output = getVal(current.toString());
-                    String addToDictionary = output + getVal(next).charAt( 0 );
+                    String addToDictionary = output;
+                    if ( Integer.parseInt( next, 2 ) == binaryCounter ) {
+                        addToDictionary += getVal( current.toString() ).charAt(0);
+                    }
+                    else {
+                        addToDictionary += getVal(next).charAt( 0 );
+                    }
                     dictionary.put( binaryCounter, addToDictionary);
                     segments.add( output );
-                    System.out.println( "Tracker: " + i + "    Output: " + output );
+                    //System.out.println( "Current: " + getVal( current.toString() ) + "     Next: " + "(" + Integer.parseInt( next, 2 ) + ")" + getVal(next) + "    Output: " + output  + "     Dictionary: " + "(" + binaryCounter + ")" + addToDictionary);
                 }
                 else {
                     String output = getVal(current.toString());
                     segments.add( output );
-                    System.out.println( "On Last      Output: " + output );
+                    //System.out.println( "On Last      Output: " + output );
                 }
 
                 binaryCounter++;
@@ -73,7 +80,7 @@ public class Lempel_Ziv_Welch_Decompression {
             return s;
         }
         else {
-            String s = new String( Character.toString( (char)Integer.parseInt( binary, 2 )  ) );
+            String s =  (char)Integer.parseInt( binary, 2 ) + "" ;
             //System.out.println( s );
             return s;
         }

@@ -15,12 +15,9 @@ public class Lempel_Ziv_Welch_Decompression_File {
 
         dictionary = new TreeMap<>();
         try {
-            Scanner bitGetter = new Scanner( System.in );
-            System.out.println("Please Enter Bit Level: ");
-            bitLevel = bitGetter.nextInt();
-
             File f = new File( "C:\\Users\\jmz00\\Git\\ADV-CPU-Studies-Java-Projects\\Compression\\compressed.txt" );
             Scanner scan = new Scanner( f );
+            bitLevel = scan.nextInt();
             binaryCounter = 128;
             double lengthBefore = 0d;
             int lengthAfter = 0;
@@ -31,7 +28,11 @@ public class Lempel_Ziv_Welch_Decompression_File {
                 lengthBefore += str.length() * 8;
                 ArrayList<String> segments = decompress( str, bitLevel );
                 lengthAfter += segments.size() * bitLevel;
-                segments.forEach(System.out::println);
+                //System.out.println( "New Line!" );
+                for ( String s : segments ) {
+                    printWriter.print( s );
+                }
+                printWriter.println();
             }
             System.out.println( "Compression Ratio: " + ( lengthBefore/lengthAfter ) + " :1");
             printWriter.close();
@@ -42,9 +43,7 @@ public class Lempel_Ziv_Welch_Decompression_File {
 
     }
 
-
     public static ArrayList<String> decompress( String binary, int bitLevel ) {
-        int binaryCounter = 128;
         int i = 0;
         ArrayList<String> segments = new ArrayList<>();
 
@@ -52,19 +51,26 @@ public class Lempel_Ziv_Welch_Decompression_File {
             while ( i < binary.length() ) {
                 StringBuilder current = new StringBuilder( );
                 current.append( binary.substring(i, i + bitLevel) );
+                dictionary.put( binaryCounter, getVal( current.toString() ) );
 
-                if ( i + bitLevel < binary.length() - bitLevel - 1) {
+                if ( i + (2*bitLevel) < binary.length() ) {
                     String next = binary.substring(i + bitLevel, i + (2*bitLevel));
                     String output = getVal(current.toString());
-                    String addToDictionary = output + getVal(next).charAt( 0 );
+                    String addToDictionary = output;
+                    if ( Integer.parseInt( next, 2 ) == binaryCounter ) {
+                        addToDictionary += getVal( current.toString() ).charAt(0);
+                    }
+                    else {
+                        addToDictionary += getVal(next).charAt( 0 );
+                    }
                     dictionary.put( binaryCounter, addToDictionary);
                     segments.add( output );
-                    System.out.println( "Tracker: " + i + "    Output: " + output );
+                    //System.out.println( "Current: " + getVal( current.toString() ) + "     Next: " + "(" + Integer.parseInt( next, 2 ) + ")" + getVal(next) + "    Output: " + output  + "     Dictionary: " + "(" + binaryCounter + ")" + addToDictionary);
                 }
                 else {
                     String output = getVal(current.toString());
                     segments.add( output );
-                    System.out.println( "On Last      Output: " + output );
+                    //System.out.println( "On Last      Output: " + output );
                 }
 
                 binaryCounter++;
