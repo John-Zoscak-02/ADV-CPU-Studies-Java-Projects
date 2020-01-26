@@ -12,7 +12,7 @@ public class Lempel_Ziv_Welch_Bit_Size {
             System.out.println("Please enter a String: ");
             Scanner scan = new Scanner( System.in );
 
-            bitLevel = 9;
+            bitLevel = 8;
             String str = scan.nextLine();
             ArrayList<String> binaryVals = compress( str );
             String compressed = print( binaryVals );
@@ -58,7 +58,7 @@ public class Lempel_Ziv_Welch_Bit_Size {
                 if ( !atEnd ) {
                     System.out.println( i + ": " + current.toString() );
                     binaryVals.add( current.toString() );
-                    if ( Integer.toBinaryString( binaryCounter ).length() == bitLevel) {
+                    if ( Integer.toBinaryString( binaryCounter ).length() == bitLevel + 1) {
                         bitLevel++;
                     }
                     dictionary.put( current.append(next).toString(),  binaryCounter++ );

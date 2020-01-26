@@ -19,7 +19,7 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
             binaryCounter = 128;
             double lengthBefore = 0d;
             int lengthAfter = 0;
-            bitLevel = 9;
+            bitLevel = 8;
             printWriter = new PrintWriter("compressed.txt", "UTF-8");
 
             StringBuilder stringBuilder = new StringBuilder();
@@ -35,6 +35,7 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
             printWriter.print( stringBuilder.toString() );
             printCompressionRatios( lengthBefore, lengthAfter );
             printWriter.close();
+            System.out.println( bitLevel );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -47,53 +48,53 @@ public class Lempel_Ziv_Welch_Bit_Size_File {
     }
 
     public static ArrayList<String> compress( String str ) {
-            int binaryCounter = 128;
-            int i = 0;
-            ArrayList<String> binaryVals = new ArrayList<>();
+        int i = 0;
+        ArrayList<String> binaryVals = new ArrayList<>();
 
-            if (str.length() > 1) {
-                while (i < str.length()) {
-                    StringBuilder current = new StringBuilder();
-                    current.append(str.charAt(i));
-                    char next = '\u0000';
-                    if (i < str.length() - 1) {
-                        next = str.charAt(i + 1);
-                    }
-                    boolean atEnd = false;
+        if ( str.length() > 1 ) {
+            while ( i < str.length() ) {
+                StringBuilder current = new StringBuilder( );
+                current.append( str.charAt( i ) );
+                char next = '\u0000';
+                if ( i < str.length() - 1 ) {
+                    next = str.charAt(i + 1);
+                }
+                boolean atEnd = false;
 
-                    while (dictionary.containsKey(current.toString() + next) && i < str.length() - 1) {
-                        current.append(next);
-                        if (i < str.length() - 2) {
-                            i++;
-                            next = str.charAt(i + 1);
-                        }
-                        else {
-                            next = '\u0000';
-                            i++;
-                            atEnd = true;
-                        }
+                while ( dictionary.containsKey( current.toString() + next ) && i < str.length() - 1 ) {
+                    current.append( next );
+                    if ( i < str.length() - 2) {
+                        i++;
+                        next = str.charAt( i + 1 );
                     }
-                    if (i >= str.length() - 1) {
+                    else {
+                        next = '\u0000';
+                        i++;
                         atEnd = true;
                     }
-
-                    if (!atEnd) {
-                        //System.out.println( i + ": " + current.toString() );
-                        binaryVals.add(current.toString());
-                        dictionary.put(current.append(next).toString(), binaryCounter++);
-                        if ( Integer.toBinaryString( binaryCounter ).length() == bitLevel) {
-                            bitLevel++;
-                        }
-                    } else {
-                        //System.out.println( "Last: " + current.toString() );
-                        binaryVals.add(current.toString());
-                    }
-                    i++;
                 }
-                return binaryVals;
+                if ( i >= str.length()-1 ) {
+                    atEnd = true;
+                }
+
+                if ( !atEnd ) {
+                    System.out.println( i + ": " + current.toString() );
+                    binaryVals.add( current.toString() );
+                    if ( Integer.toBinaryString( binaryCounter ).length() == bitLevel + 1) {
+                        bitLevel++;
+                    }
+                    dictionary.put( current.append(next).toString(),  binaryCounter++ );
+                }
+                else {
+                    System.out.println( "Last: " + current.toString() );
+                    binaryVals.add( current.toString() );
+                }
+                i++;
             }
             return binaryVals;
         }
+        return binaryVals;
+    }
 
         public static String print (ArrayList < String > binaryVals) {
             StringBuilder stringBuilder = new StringBuilder();
