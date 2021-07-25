@@ -18,7 +18,7 @@ public class Lempel_Ziv_Welch_Compression_File {
             binaryCounter = 128;
             double lengthBefore = 0d;
             int lengthAfter = 0;
-            printWriter = new PrintWriter("uncompressed.txt", "UTF-8");
+            printWriter = new PrintWriter("compressed.txt", "UTF-8");
             while ( scan.hasNext() ) {
                 String str = scan.nextLine();
                 lengthBefore += str.length() * 8;

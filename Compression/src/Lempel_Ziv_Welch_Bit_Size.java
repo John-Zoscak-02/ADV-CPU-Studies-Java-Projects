@@ -87,8 +87,9 @@ public class Lempel_Ziv_Welch_Bit_Size {
                 decimal.append( (int)s.charAt(0) + " ");
             }
         }
-        System.out.println( stringBuilder.toString() );
-        System.out.println( decimal.toString());
+//        System.out.println( stringBuilder.toString() );
+//        System.out.println( decimal.toString());
+
         return stringBuilder.toString();
     }
 
